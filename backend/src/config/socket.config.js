@@ -1,6 +1,6 @@
 export const socketConfig = {
   cors: {
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    origin: process.env.CORS_ORIGIN || "https://guessing-game-umber-kappa.vercel.app/",
     methods: ["GET", "POST"],
     credentials: true
   },
