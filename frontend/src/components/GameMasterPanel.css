@@ -1,0 +1,202 @@
+.game-master-panel {
+  background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+  padding: 24px;
+  color: white;
+}
+
+.game-master-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.game-master-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Status Display */
+.master-status-box {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.master-status-title {
+  font-size: 18px;
+  margin: 0 0 8px 0;
+}
+
+.master-status-subtitle {
+  font-size: 14px;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.master-answer-display {
+  margin-top: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.master-answer-label {
+  font-size: 12px;
+  opacity: 0.75;
+  margin: 0 0 4px 0;
+}
+
+.master-answer-value {
+  font-weight: 700;
+  font-size: 18px;
+  margin: 0;
+}
+
+/* Question Form */
+.master-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.master-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.master-form-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.master-form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.master-form-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.master-form-input:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.master-form-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.master-char-count {
+  font-size: 12px;
+  opacity: 0.75;
+  margin: 0;
+}
+
+/* Question Display */
+.master-question-display {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.master-question-label {
+  font-size: 14px;
+  opacity: 0.9;
+  margin: 0 0 8px 0;
+}
+
+.master-question-text {
+  font-weight: 600;
+  font-size: 18px;
+  margin: 0;
+}
+
+/* Waiting Box */
+.master-waiting-box {
+  background: rgba(234, 179, 8, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+
+.master-waiting-text {
+  font-size: 14px;
+  margin: 0;
+}
+
+.master-waiting-count {
+  font-size: 12px;
+  opacity: 0.75;
+  margin: 4px 0 0 0;
+}
+
+/* Buttons */
+.master-btn {
+  width: 100%;
+  padding: 14px 20px;
+  background: white;
+  color: #7c3aed;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.master-btn:hover:not(:disabled) {
+  background: #f5f3ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.master-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.master-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .game-master-panel {
+    padding: 20px;
+  }
+
+  .game-master-title {
+    font-size: 20px;
+  }
+
+  .master-form {
+    gap: 16px;
+  }
+}
