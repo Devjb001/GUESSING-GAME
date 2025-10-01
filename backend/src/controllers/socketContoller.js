@@ -124,64 +124,64 @@ export const handleSocketConnection = (io, socket) => {
     }
   });
 
-  // Handle starting the game
-  socket.on('start-game', ({ sessionId }, callback) => {
-    try {
-      // Validate input
-      const sessionValidation = validateSessionId(sessionId);
-      if (!sessionValidation.valid) {
-        return callback({ 
-          success: false, 
-          message: sessionValidation.message 
-        });
-      }
-
-      // Start game
-      const result = gameSessionManager.startGame(
-        sessionValidation.sessionId,
-        socket.id
-      );
-
-      if (result.success) {
-        const session = gameSessionManager.getSession(sessionValidation.sessionId);
-
-        // Notify all players that game started
-        io.to(sessionValidation.sessionId).emit('game-started', {
-          session: session.toJSON(),
-          question: session.question,
-          timer: gameConfig.gameTimer,
-          message: 'Game has started! Start guessing!'
-        });
-
-        // Set timer for game timeout
-        session.timer = setTimeout(() => {
-          const timeoutResult = gameSessionManager.endGameByTimeout(sessionValidation.sessionId);
-          
-          if (timeoutResult.success) {
-            const endedSession = gameSessionManager.getSession(sessionValidation.sessionId);
-            
-            io.to(sessionValidation.sessionId).emit('game-ended', {
-              session: endedSession.toJSON(),
-              reason: 'timeout',
-              answer: endedSession.answer,
-              winner: null,
-              message: 'Time is up! No one guessed the correct answer.'
-            });
-          }
-        }, gameConfig.gameTimer);
-
-        callback({ success: true, message: result.message });
-      } else {
-        callback(result);
-      }
-    } catch (error) {
-      console.error('Error in start-game:', error);
-      callback({ 
+// Handle starting the game
+socket.on('start-game', ({ sessionId }, callback) => {
+  try {
+    // Validate input
+    const sessionValidation = validateSessionId(sessionId);
+    if (!sessionValidation.valid) {
+      return callback({ 
         success: false, 
-        message: 'An error occurred while starting the game' 
+        message: sessionValidation.message 
       });
     }
-  });
+
+    // Start game
+    const result = gameSessionManager.startGame(
+      sessionValidation.sessionId,
+      socket.id
+    );
+
+    if (result.success) {
+      const session = gameSessionManager.getSession(sessionValidation.sessionId);
+
+      // IMPORTANT: Emit complete session to ALL players
+      io.to(sessionValidation.sessionId).emit('game-started', {
+        session: session.toJSON(),  // Full session object
+        question: session.question,
+        timer: gameConfig.gameTimer,
+        message: 'Game has started! Start guessing!'
+      });
+
+      // Set timer for game timeout
+      session.timer = setTimeout(() => {
+        const timeoutResult = gameSessionManager.endGameByTimeout(sessionValidation.sessionId);
+        
+        if (timeoutResult.success) {
+          const endedSession = gameSessionManager.getSession(sessionValidation.sessionId);
+          
+          io.to(sessionValidation.sessionId).emit('game-ended', {
+            session: endedSession.toJSON(),
+            reason: 'timeout',
+            answer: endedSession.answer,
+            winner: null,
+            message: 'Time is up! No one guessed the correct answer.'
+          });
+        }
+      }, gameConfig.gameTimer);
+
+      callback({ success: true, message: result.message });
+    } else {
+      callback(result);
+    }
+  } catch (error) {
+    console.error('Error in start-game:', error);
+    callback({ 
+      success: false, 
+      message: 'An error occurred while starting the game' 
+    });
+  }
+});
 
   // Handle submitting an answer/guess
   socket.on('submit-guess', ({ sessionId, guess }, callback) => {

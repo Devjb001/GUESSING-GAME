@@ -1,4 +1,11 @@
-export const SOCKET_URL = 'http://localhost:5000';
+
+// const SOCKET_URL = import.meta.env.PROD 
+//   ? 'https://guessing-game-yck1.onrender.com' 
+//   : 'http://localhost:5000';
+
+export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
+
+export { SOCKET_URL };
 
 export const GAME_STATUS = {
   WAITING: 'waiting',
@@ -17,4 +24,4 @@ export const MESSAGE_TYPES = {
 };
 
 export const MAX_ATTEMPTS = 3;
-export const GAME_TIMER = 60; // seconds
+export const GAME_TIMER = 60; 
