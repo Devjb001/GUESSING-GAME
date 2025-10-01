@@ -3,7 +3,7 @@
 //   ? 'https://guessing-game-yck1.onrender.com' 
 //   : 'http://localhost:5000';
 
-export const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
 
 export { SOCKET_URL };
 
