@@ -1,11 +1,13 @@
 
-// const SOCKET_URL = import.meta.env.PROD 
-//   ? 'https://guessing-game-yck1.onrender.com' 
-//   : 'http://localhost:5000';
+const getSocketURL = () => {
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return 'http://localhost:5000';
+  }
+  
+  return 'https://guessing-game-yck1.onrender.com';
+};
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
-
-export { SOCKET_URL };
+export const SOCKET_URL = getSocketURL();
 
 export const GAME_STATUS = {
   WAITING: 'waiting',

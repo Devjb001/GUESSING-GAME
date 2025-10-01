@@ -5,51 +5,60 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { handleSocketConnection } from './src/controllers/socketContoller.js';
 
-// Load environment variables
-dotenv.config();
-
 const app = express();
 const httpServer = createServer(app);
 
 
-const allowedOrigins = process.env.CORS_ORIGIN 
-  ? process.env.CORS_ORIGIN.split(',') 
-  : ['http://localhost:5173', 'http://localhost:3000'];
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://127.0.0.1:5173',
+  'https://your-frontend-app.vercel.app',  
+  
+];
 
-console.log('Allowed CORS origins:', allowedOrigins);
 
-// CORS configuration for production
+if (process.env.CORS_ORIGIN) {
+  allowedOrigins.push(...process.env.CORS_ORIGIN.split(','));
+}
+
+console.log('📋 Allowed origins:', allowedOrigins);
+
+
 const io = new Server(httpServer, {
   cors: {
     origin: (origin, callback) => {
-  
-      if (!origin) return callback(null, true);
+    
+      if (!origin) {
+        return callback(null, true);
+      }
       
-      if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
+ 
+      if (allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        console.log('Blocked origin:', origin);
+        console.log(' Blocked origin:', origin);
         callback(new Error('Not allowed by CORS'));
       }
     },
-    methods: ["GET", "POST"],
+    methods: ['GET', 'POST'],
     credentials: true
   },
-  pingTimeout: 60000,
-  pingInterval: 25000,
-  transports: ['websocket', 'polling']
+  transports: ['websocket', 'polling'],
+  allowEIO3: true
 });
 
 const PORT = process.env.PORT || 5000;
 
-// Middleware - CORS for Express
+
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.log('❌ Blocked origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
@@ -59,13 +68,13 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Basic health check route
+// Health check routes
 app.get('/', (req, res) => {
   res.json({ 
-    status: 'success',
-    message: 'Guessing Game API is running',
+    status: 'OK',
+    message: 'Guessing Game Backend Running',
     timestamp: new Date().toISOString(),
-    env: process.env.NODE_ENV
+    environment: process.env.NODE_ENV || 'development'
   });
 });
 
@@ -73,16 +82,17 @@ app.get('/health', (req, res) => {
   res.json({ 
     status: 'healthy',
     uptime: process.uptime(),
-    timestamp: new Date().toISOString()
+    allowedOrigins: allowedOrigins
   });
 });
 
-// Socket.io connection handling
+// Socket connection
 io.on('connection', (socket) => {
+  console.log('✅ User connected:', socket.id);
   try {
     handleSocketConnection(io, socket);
   } catch (error) {
-    console.error('Socket connection error:', error);
+    console.error('❌ Socket error:', error);
   }
 });
 
@@ -94,39 +104,38 @@ app.use((req, res) => {
   });
 });
 
-// Error handling middleware
+// Error handler
 app.use((err, req, res, next) => {
-  console.error('Server Error:', err.stack);
+  console.error('❌ Error:', err);
   res.status(500).json({ 
     status: 'error',
-    message: 'Something went wrong!',
-    error: process.env.NODE_ENV === 'development' ? err.message : 'Internal server error'
+    message: 'Internal server error' 
   });
 });
 
-// Start server
+
 httpServer.listen(PORT, '0.0.0.0', () => {
-  console.log('='.repeat(50));
-  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log('='.repeat(60));
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`📡 Socket.io is ready for connections`);
-  console.log(`🔒 CORS Origins: ${allowedOrigins.join(', ')}`);
-  console.log('='.repeat(50));
+  console.log(`📡 Socket.io ready`);
+  console.log(`🔒 CORS: ${allowedOrigins.length} allowed origins`);
+  console.log('='.repeat(60));
 });
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
+  console.log('⚠️ SIGTERM signal received: closing server');
   httpServer.close(() => {
-    console.log('HTTP server closed');
+    console.log('✅ Server closed gracefully');
     process.exit(0);
   });
 });
 
 process.on('uncaughtException', (error) => {
-  console.error('Uncaught Exception:', error);
+  console.error('❌ Uncaught Exception:', error);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  console.error('❌ Unhandled Rejection:', reason);
 });
