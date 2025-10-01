@@ -3,8 +3,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { socketConfig } from './src/config/socket.config.js';
-import { handleSocketConnection } from './src/controllers/socket.controller.js';
+import { handleSocketConnection } from './src/controllers/socketContoller.js';
 
 // Load environment variables
 dotenv.config();
