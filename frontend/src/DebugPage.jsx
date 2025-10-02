@@ -13,13 +13,19 @@ const DebugPage = () => {
 
   useEffect(() => {
     // Detect backend URL
-    const url = window.location.hostname === 'localhost' 
-      ? 'http://localhost:5000'
-      : 'https://guessing-game-yck1.onrender.com';  // ← PUT YOUR RENDER URL HERE
-    
-    setBackendUrl(url);
-    addLog(`Detected backend URL: ${url}`);
-
+    const isProduction = 
+    window.location.hostname !== 'localhost' && 
+    window.location.hostname !== '127.0.0.1' &&
+    window.location.hostname !== '';
+  
+  const url = isProduction
+    ? 'https://guessing-game-yck1.onrender.com'  // ← PUT YOUR ACTUAL RENDER URL
+    : 'http://localhost:5000';
+  
+  setBackendUrl(url);
+  addLog(`Environment: ${isProduction ? 'PRODUCTION' : 'DEVELOPMENT'}`);
+  addLog(`Hostname: ${window.location.hostname}`);
+  addLog(`Detected backend URL: ${url}`);
     // Test HTTP connection
     fetch(url)
       .then(res => res.json())
