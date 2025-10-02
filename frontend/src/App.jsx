@@ -4,8 +4,10 @@ import { useSocket } from './hooks/useSocket';
 import JoinSession from './components/JoinSession';
 import GameSession from './components/GameSession';
 import Loader from './components/Loader';
+import DebugPage from './DebugPage';
 
 function App() {
+  return <DebugPage />;
   const socket = useSocket();
   const [isConnected, setIsConnected] = useState(false);
   const [session, setSession] = useState(null);
