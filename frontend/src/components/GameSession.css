@@ -1,0 +1,234 @@
+.game-session-container {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  padding: 20px;
+}
+
+.game-session-content {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header */
+.game-session-header {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.game-session-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.game-session-header-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.game-session-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 12px 0;
+}
+
+.game-session-id-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.game-session-id-label {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+.game-session-id-code {
+  background-color: #f1f5f9;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  color: #7c3aed;
+}
+
+.game-session-copy-btn {
+  padding: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-session-copy-btn:hover {
+  background-color: #f1f5f9;
+}
+
+.game-session-leave-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ef4444;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.game-session-leave-btn:hover {
+  background-color: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.game-session-leave-btn:active {
+  transform: translateY(0);
+}
+
+/* Grid Layout */
+.game-session-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+}
+
+/* Activity Feed */
+.activity-feed-container {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  padding: 24px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-feed-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 16px 0;
+}
+
+.activity-feed-messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-right: 8px;
+}
+
+.activity-feed-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.activity-feed-messages::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.activity-feed-messages::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.activity-feed-messages::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.activity-feed-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.activity-feed-empty-text {
+  color: #64748b;
+  text-align: center;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .game-session-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .activity-feed-container {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .game-session-container {
+    padding: 16px;
+  }
+
+  .game-session-header {
+    padding: 20px;
+  }
+
+  .game-session-title {
+    font-size: 24px;
+  }
+
+  .game-session-header-content {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .game-session-leave-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .game-session-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .activity-feed-container {
+    height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-session-container {
+    padding: 12px;
+  }
+
+  .game-session-header {
+    padding: 16px;
+  }
+
+  .game-session-title {
+    font-size: 20px;
+  }
+
+  .game-session-id-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

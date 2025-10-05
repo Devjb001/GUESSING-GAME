@@ -1,0 +1,98 @@
+.chat-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chat-message-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.chat-message-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-message-text {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 4px 0;
+  word-wrap: break-word;
+}
+
+.chat-message-username {
+  font-size: 12px;
+  margin: 0;
+  opacity: 0.75;
+}
+
+.chat-message-time {
+  font-size: 12px;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+/* Message Type Colors */
+.chat-message.system {
+  background-color: #dbeafe;
+  color: #1e40af;
+  border-color: #bfdbfe;
+}
+
+.chat-message.player-join {
+  background-color: #d1fae5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+
+.chat-message.player-leave {
+  background-color: #f1f5f9;
+  color: #334155;
+  border-color: #e2e8f0;
+}
+
+.chat-message.game-start {
+  background-color: #e9d5ff;
+  color: #6b21a8;
+  border-color: #d8b4fe;
+}
+
+.chat-message.guess-correct {
+  background-color: #d1fae5;
+  color: #065f46;
+  border-color: #a7f3d0;
+}
+
+.chat-message.guess-wrong {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+.chat-message.win {
+  background-color: #fef3c7;
+  color: #78350f;
+  border-color: #fde68a;
+}
+
+.chat-message.timeout {
+  background-color: #fed7aa;
+  color: #9a3412;
+  border-color: #fdba74;
+}
