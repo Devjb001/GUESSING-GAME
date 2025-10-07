@@ -122,17 +122,18 @@ const GameSession = ({ socket, session, currentSocketId, onLeaveSession }) => {
     };
   }, [socket]);
 
-  const handleSetQuestion = (question, answer) => {
-    return new Promise((resolve, reject) => {
-      socket.emit('set-question', { sessionId: session.sessionId, question, answer }, (response) => {
-        if (response.success) {
-          resolve(response);
-        } else {
-          reject(new Error(response.message));
-        }
-      });
+ const handleSetQuestion = (question, answer) => {
+  return new Promise((resolve, reject) => {
+    socket.emit('set-question', { sessionId: session.sessionId, question, answer }, (response) => {
+      if (response.success) {
+        resolve(response);
+      } else {
+        reject(new Error(response.message));
+      }
     });
-  };
+  });
+};
+
 
   const handleStartGame = () => {
     return new Promise((resolve, reject) => {

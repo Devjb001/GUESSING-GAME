@@ -49,27 +49,43 @@ const PlayerPanel = ({ session, currentPlayer, onSubmitGuess }) => {
   const attemptsLeft = MAX_ATTEMPTS - (currentPlayer?.attempts || 0);
   const canGuess = session.status === 'in-progress' && attemptsLeft > 0 && !currentPlayer?.hasWon;
 
-  // WAITING STATE - Show question if available
+  // WAITING STATE - Show question and allow typing
   if (session.status === 'waiting') {
     return (
       <div className="player-panel">
         <h2 className="player-panel-title">Player Panel</h2>
         
         {session.hasQuestion ? (
-          // Question is set, waiting for game to start
+          // Question is set, show it and allow typing
           <div>
             <div className="player-question-box">
-              <p className="player-question-label">Question Preview:</p>
+              <p className="player-question-label">Question:</p>
               <p className="player-question-text">{session.question}</p>
             </div>
-            
-            <div className="player-status-box" style={{ marginTop: '16px' }}>
-              <Clock size={48} className="player-status-icon" />
-              <p className="player-status-title">Get Ready!</p>
-              <p className="player-status-subtitle">
-                Game master will start the game soon
-              </p>
-            </div>
+
+            {/* Allow player to type answer while waiting */}
+            <form onSubmit={(e) => e.preventDefault()} className="player-guess-form">
+              <div className="player-form-group">
+                <label className="player-form-label">Prepare Your Answer</label>
+                <input
+                  type="text"
+                  value={guess}
+                  onChange={(e) => setGuess(e.target.value)}
+                  placeholder="Type your answer here..."
+                  className="player-form-input"
+                  maxLength={100}
+                />
+                <p className="player-char-count">{guess.length}/100 characters</p>
+              </div>
+
+              <div className="player-status-box" style={{ marginTop: '16px' }}>
+                <Clock size={48} className="player-status-icon" />
+                <p className="player-status-title">Get Ready!</p>
+                <p className="player-status-subtitle">
+                  Game will start automatically...
+                </p>
+              </div>
+            </form>
           </div>
         ) : (
           // No question yet

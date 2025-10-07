@@ -66,63 +66,98 @@ export const handleSocketConnection = (io, socket) => {
     }
   });
 
-  // Handle setting question by game master
-  socket.on('set-question', ({ sessionId, question, answer }, callback) => {
-    try {
-      // Validate inputs
-      const sessionValidation = validateSessionId(sessionId);
-      if (!sessionValidation.valid) {
-        return callback({ 
-          success: false, 
-          message: sessionValidation.message 
-        });
-      }
-
-      const questionValidation = validateQuestion(question);
-      if (!questionValidation.valid) {
-        return callback({ 
-          success: false, 
-          message: questionValidation.message 
-        });
-      }
-
-      const answerValidation = validateAnswer(answer);
-      if (!answerValidation.valid) {
-        return callback({ 
-          success: false, 
-          message: answerValidation.message 
-        });
-      }
-
-      // Set question
-      const result = gameSessionManager.setQuestion(
-        sessionValidation.sessionId,
-        socket.id,
-        questionValidation.question,
-        answerValidation.answer
-      );
-
-      if (result.success) {
-        const session = gameSessionManager.getSession(sessionValidation.sessionId);
-
-        // Notify all players that question is set
-        io.to(sessionValidation.sessionId).emit('question-set', {
-          session: session.toJSON(),
-          message: 'Question has been set by the game master'
-        });
-
-        callback({ success: true, message: result.message });
-      } else {
-        callback(result);
-      }
-    } catch (error) {
-      console.error('Error in set-question:', error);
-      callback({ 
+ // Handle setting question by game master
+socket.on('set-question', ({ sessionId, question, answer }, callback) => {
+  try {
+    // Validate inputs
+    const sessionValidation = validateSessionId(sessionId);
+    if (!sessionValidation.valid) {
+      return callback({ 
         success: false, 
-        message: 'An error occurred while setting the question' 
+        message: sessionValidation.message 
       });
     }
-  });
+
+    const questionValidation = validateQuestion(question);
+    if (!questionValidation.valid) {
+      return callback({ 
+        success: false, 
+        message: questionValidation.message 
+      });
+    }
+
+    const answerValidation = validateAnswer(answer);
+    if (!answerValidation.valid) {
+      return callback({ 
+        success: false, 
+        message: answerValidation.message 
+      });
+    }
+
+    // Set question
+    const result = gameSessionManager.setQuestion(
+      sessionValidation.sessionId,
+      socket.id,
+      questionValidation.question,
+      answerValidation.answer
+    );
+
+    if (result.success) {
+      const session = gameSessionManager.getSession(sessionValidation.sessionId);
+
+      // Notify all players that question is set
+      io.to(sessionValidation.sessionId).emit('question-set', {
+        session: session.toJSON(),
+        message: 'Question has been set by the game master'
+      });
+
+      // AUTO-START GAME if minimum players met
+      if (session.playerCount >= gameConfig.minPlayers) {
+        const startResult = gameSessionManager.startGame(
+          sessionValidation.sessionId,
+          socket.id
+        );
+
+        if (startResult.success) {
+          // Notify all players that game started
+          io.to(sessionValidation.sessionId).emit('game-started', {
+            session: session.toJSON(),
+            question: session.question,
+            timer: gameConfig.gameTimer,
+            message: 'Game has started! Start guessing!'
+          });
+
+          // Set timer for game timeout
+          session.timer = setTimeout(() => {
+            const timeoutResult = gameSessionManager.endGameByTimeout(sessionValidation.sessionId);
+            
+            if (timeoutResult.success) {
+              const endedSession = gameSessionManager.getSession(sessionValidation.sessionId);
+              
+              io.to(sessionValidation.sessionId).emit('game-ended', {
+                session: endedSession.toJSON(),
+                reason: 'timeout',
+                answer: endedSession.answer,
+                winner: null,
+                message: 'Time is up! No one guessed the correct answer.'
+              });
+            }
+          }, gameConfig.gameTimer);
+        }
+      }
+
+      callback({ success: true, message: result.message });
+    } else {
+      callback(result);
+    }
+  } catch (error) {
+    console.error('Error in set-question:', error);
+    callback({ 
+      success: false, 
+      message: 'An error occurred while setting the question' 
+    });
+  }
+});
 
 // Handle starting the game
 socket.on('start-game', ({ sessionId }, callback) => {

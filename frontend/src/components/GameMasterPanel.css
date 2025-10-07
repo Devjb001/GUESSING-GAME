@@ -200,3 +200,22 @@
     gap: 16px;
   }
 }
+
+/* Timer Display */
+.master-timer-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 16px 24px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.master-timer-value {
+  font-weight: 700;
+  font-size: 32px;
+  margin: 0;
+}
